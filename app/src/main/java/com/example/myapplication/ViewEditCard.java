@@ -29,12 +29,13 @@ public class ViewEditCard extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(resourceFilePath, Context.MODE_PRIVATE);
         FlashCard flashCard = new FlashCard(quesiton, answer, topic);
         CardResourceStore.saveFlashCard(flashCard, sharedPreferences);
-        launchMain();
+        launchMain("New card has been saved");
     }
 
-    public void launchMain()
+    public void launchMain(String toast)
     {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("toast", toast);
         startActivity(intent);
     }
 }
