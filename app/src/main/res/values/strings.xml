@@ -4,4 +4,7 @@
     <string name="answer">Answer...</string>
     <string name="topic">Topic</string>
     <string name="card_saved_toast">New card saved</string>
+    <string name="edit">Edit</string>
+    <string name="textview">TextView</string>
+    <string name="question_summary_hint">Question</string>
 </resources>
