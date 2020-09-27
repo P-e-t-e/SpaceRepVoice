@@ -15,6 +15,13 @@ public class FlashCard {
         this.uuid = UUID.randomUUID().toString().replace("-", "");
     }
 
+    public FlashCard(String question, String answer, String topic, String uuid) {
+        this.question = question;
+        this.answer = answer;
+        this.topic = topic;
+        this.uuid = uuid;
+    }
+
     public String getQuestion() {
         return question;
     }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.model.FlashCard;
@@ -66,6 +67,21 @@ public class MainActivity extends AppCompatActivity {
     public void onClickAddCardButton(View view)
     {
         Intent intent = new Intent(this, ViewEditCard.class);
+        startActivity(intent);
+    }
+
+    public void onClickEditCardButton(View view)
+    {
+        Intent intent = new Intent(this, ViewEditCard.class);
+        TextView summaryTopic = findViewById(R.id.card_summary_topic);
+        TextView summaryQuestion = findViewById(R.id.card_summary_question);
+        TextView cardId = findViewById(R.id.card_id);
+        TextView cardAnswer = findViewById(R.id.card_answer);
+        intent.putExtra("edit", true);
+        intent.putExtra("topic", summaryTopic.getText());
+        intent.putExtra("question", summaryQuestion.getText());
+        intent.putExtra("card_id", cardId.getText());
+        intent.putExtra("card_answer", cardAnswer.getText());
         startActivity(intent);
     }
 }
