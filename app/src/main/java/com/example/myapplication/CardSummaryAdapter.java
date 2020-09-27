@@ -30,7 +30,8 @@ public class CardSummaryAdapter extends RecyclerView.Adapter<FlashCardSummaryVie
 
     @Override
     public void onBindViewHolder(@NonNull FlashCardSummaryViewHolder holder, int position) {
-
+        holder.setSummaryTopicText(cards.get(position).getTopic());
+        holder.setSummaryQuestionText(cards.get(position).getQuestion());
     }
 
     @Override

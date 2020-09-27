@@ -16,11 +16,13 @@ public class FlashCardSummaryViewHolder extends RecyclerView.ViewHolder {
         this.summaryQuestion = view.findViewById(R.id.card_summary_question);
     }
 
-    public TextView getSummaryTopic() {
-        return summaryTopic;
+    public void setSummaryTopicText(String string)
+    {
+        summaryTopic.setText(string);
     }
 
-    public TextView getSummaryQuestion() {
-        return summaryQuestion;
+    public void setSummaryQuestionText(String string)
+    {
+        summaryQuestion.setText(string);
     }
 }
