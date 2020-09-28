@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,13 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickAddCardButton(View view)
     {
-        Intent intent = new Intent(this, ViewEditCard.class);
+        Intent intent = new Intent(this, ViewEditCardActivity.class);
         startActivity(intent);
     }
 
     public void onClickEditCardButton(View view)
     {
-        Intent intent = new Intent(this, ViewEditCard.class);
+        Intent intent = new Intent(this, ViewEditCardActivity.class);
         TextView summaryTopic = findViewById(R.id.card_summary_topic);
         TextView summaryQuestion = findViewById(R.id.card_summary_question);
         TextView cardId = findViewById(R.id.card_id);
@@ -82,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("question", summaryQuestion.getText());
         intent.putExtra("card_id", cardId.getText());
         intent.putExtra("card_answer", cardAnswer.getText());
+        startActivity(intent);
+    }
+
+    public void onClickStartPlayingButton(View view)
+    {
+        Intent intent = new Intent(this, PlayQuestionsActivity.class);
         startActivity(intent);
     }
 }

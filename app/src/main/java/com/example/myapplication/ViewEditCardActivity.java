@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.myapplication.model.FlashCard;
 import com.example.myapplication.tools.CardResourceStore;
 
-public class ViewEditCard extends AppCompatActivity {
+public class ViewEditCardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
