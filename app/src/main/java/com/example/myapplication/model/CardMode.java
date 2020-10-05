@@ -1,5 +1,5 @@
 package com.example.myapplication.model;
 
 public enum CardMode {
-    FAIL, OK, GOOD
+    FAIL, OK, GOOD, WAIT, REPEAT
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +27,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         setUpRecyclerView();
-        if(intent.hasExtra("toast"))
-        {
+        if (intent.hasExtra("toast")) {
             getIntent().getStringExtra("toast");
             Toast.makeText(this, R.string.card_saved_toast, Toast.LENGTH_SHORT).show();
         }
         Log.d("test", "in on start main");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_OK) {
+            if (data != null && data.hasExtra("toast")) {
+                Toast.makeText(this, data.getStringExtra("toast"), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setUpRecyclerView() {
@@ -63,14 +73,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public void onClickAddCardButton(View view)
-    {
+    public void onClickAddCardButton(View view) {
         Intent intent = new Intent(this, ViewEditCardActivity.class);
         startActivity(intent);
     }
 
-    public void onClickEditCardButton(View view)
-    {
+    public void onClickEditCardButton(View view) {
         Intent intent = new Intent(this, ViewEditCardActivity.class);
         TextView summaryTopic = findViewById(R.id.card_summary_topic);
         TextView summaryQuestion = findViewById(R.id.card_summary_question);
@@ -84,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickStartPlayingButton(View view)
-    {
+    public void onClickStartPlayingButton(View view) {
         Intent intent = new Intent(this, PlayQuestionsActivity.class);
         startActivity(intent);
     }
