@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.myapplication.model.CardStatus;
 import com.example.myapplication.model.FlashCard;
 import com.example.myapplication.tools.CardResourceStore;
 
@@ -55,7 +56,8 @@ public class ViewEditCardActivity extends AppCompatActivity {
         }
         else
         {
-            flashCard = new FlashCard(quesiton, answer, topic, id);
+            //TODO update with actual card status
+            flashCard = new FlashCard(quesiton, answer, topic, id, new CardStatus(1, 2));
         }
         CardResourceStore.saveFlashCard(flashCard, sharedPreferences);
         launchMain("New card has been saved");
