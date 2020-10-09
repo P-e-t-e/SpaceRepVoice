@@ -50,23 +50,27 @@ public class ViewEditCardActivity extends AppCompatActivity {
         String resourceFilePath = CardResourceStore.getCardFileName();
         SharedPreferences sharedPreferences = getSharedPreferences(resourceFilePath, Context.MODE_PRIVATE);
         FlashCard flashCard;
+        String toastMsg;
         if(id.isEmpty())
         {
              flashCard = new FlashCard(quesiton, answer, topic);
+             toastMsg = "New card has been saved";
         }
         else
         {
             //TODO update with actual card status
             flashCard = new FlashCard(quesiton, answer, topic, id, new CardStatus(1, 2));
+            toastMsg = "Card updated";
         }
         CardResourceStore.saveFlashCard(flashCard, sharedPreferences);
-        launchMain("New card has been saved");
+        launchMain(toastMsg);
     }
 
     public void launchMain(String toast)
     {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("toast", toast);
-        startActivity(intent);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

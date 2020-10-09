@@ -8,4 +8,6 @@
     <string name="textview">TextView</string>
     <string name="question_summary_hint">Question</string>
     <string name="start">Start</string>
+    <string name="delete_card">delete card</string>
+    <string name="edit_card">edit card</string>
 </resources>

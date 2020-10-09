@@ -32,4 +32,9 @@ public class CardResourceStore {
     public static String getCardFileName() {
         return CARD_FILE_NAME;
     }
+
+    public static void deleteCard(String uuid, SharedPreferences sharedPreferences)
+    {
+        sharedPreferences.edit().remove(uuid).apply();
+    }
 }

@@ -21,6 +21,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_EDIT_CARD = 0;
+    private static final int REQUEST_PLAY_CARDS = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
             getIntent().getStringExtra("toast");
             Toast.makeText(this, R.string.card_saved_toast, Toast.LENGTH_SHORT).show();
         }
-        Log.d("test", "in on start main");
     }
 
     @Override
@@ -89,11 +90,21 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("question", summaryQuestion.getText());
         intent.putExtra("card_id", cardId.getText());
         intent.putExtra("card_answer", cardAnswer.getText());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_EDIT_CARD);
+    }
+
+    public void onClickDeleteCardButton(View view)
+    {
+        String flashcardFilePath = CardResourceStore.getCardFileName();
+        SharedPreferences sharedPreferences = getSharedPreferences(flashcardFilePath, Context.MODE_PRIVATE);
+        TextView cardId = findViewById(R.id.card_id);
+        CardResourceStore.deleteCard(cardId.toString(), sharedPreferences);
+        Toast.makeText(this, "Card deleted", Toast.LENGTH_SHORT).show();
+        //TODO: Remove item from recyclerview adapter
     }
 
     public void onClickStartPlayingButton(View view) {
         Intent intent = new Intent(this, PlayQuestionsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_PLAY_CARDS);
     }
 }
