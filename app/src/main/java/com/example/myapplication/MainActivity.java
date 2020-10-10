@@ -21,14 +21,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_EDIT_CARD = 0;
-    private static final int REQUEST_PLAY_CARDS = 0;
+    private static final int REQUEST_EDIT_CARD = 991;
+    private static final int REQUEST_PLAY_CARDS = 992;
+    private RecyclerView summaryRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        setUpRecyclerView();
+        summaryRecyclerView = (RecyclerView) findViewById(R.id.card_summary_recycler);
+        setUpRecyclerView(summaryRecyclerView);
         if (intent.hasExtra("toast")) {
             getIntent().getStringExtra("toast");
             Toast.makeText(this, R.string.card_saved_toast, Toast.LENGTH_SHORT).show();
@@ -37,17 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("temp", "MainActivity onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
+        setNewRecyclerViewCardAdapter(summaryRecyclerView);
         if (requestCode == RESULT_OK) {
             if (data != null && data.hasExtra("toast")) {
+                Log.d("temp", "MainActivity toastTriggered");
                 Toast.makeText(this, data.getStringExtra("toast"), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void setUpRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.card_summary_recycler);
-
+    private void setUpRecyclerView(RecyclerView recyclerView) {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -55,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        setNewRecyclerViewCardAdapter(recyclerView);
 
+    }
+
+    private void setNewRecyclerViewCardAdapter(RecyclerView recyclerView) {
         // specify an adapter (see also next example)
         List<FlashCard> cards = getAllFlashCardSummaries();
         RecyclerView.Adapter mAdapter = new CardSummaryAdapter(cards);
@@ -98,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
         String flashcardFilePath = CardResourceStore.getCardFileName();
         SharedPreferences sharedPreferences = getSharedPreferences(flashcardFilePath, Context.MODE_PRIVATE);
         TextView cardId = findViewById(R.id.card_id);
-        CardResourceStore.deleteCard(cardId.toString(), sharedPreferences);
+        CardResourceStore.deleteCard(cardId.getText().toString(), sharedPreferences);
         Toast.makeText(this, "Card deleted", Toast.LENGTH_SHORT).show();
-        //TODO: Remove item from recyclerview adapter
+        setNewRecyclerViewCardAdapter(summaryRecyclerView);
     }
 
     public void onClickStartPlayingButton(View view) {

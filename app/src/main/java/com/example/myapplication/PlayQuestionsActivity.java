@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("temp", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_questions);
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -47,6 +49,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
      * @return most urgent card
      */
     private FlashCard getMostUrgentFlashcard() {
+        Log.d("temp", "getMostUrgentFlashcard");
         long currentTimeMillis = System.currentTimeMillis();
         long currentLowestTimeDue = 0l;
         FlashCard currentMostUrgentCard = null;
@@ -62,10 +65,13 @@ public class PlayQuestionsActivity extends AppCompatActivity {
     }
 
     public void onClickStartButton(View view) {
+        Log.d("temp", "onCLickStartButton");
         tts.speak("Starting new learning session in 3 2 1", TextToSpeech.QUEUE_FLUSH, null);
+        askMostUrgentQuestion(false);
     }
 
     private void askMostUrgentQuestion(boolean repeat) {
+        Log.d("temp", "askMostUrgentQuestion");
         //Get the most urgent flashcard or finish and close if all finished
         if(!repeat)
         {
@@ -87,6 +93,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
     }
 
     private void setCurrentUrgentFlashcard() {
+        Log.d("temp", "setCurrentUrgentFlashcard");
         final FlashCard flashCard = getMostUrgentFlashcard();
 
         //If no cards are left, lets return to main activity and display a toast
@@ -109,6 +116,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
      * @param flashCard
      */
     private void speakAnswerAndGetInput(final FlashCard flashCard, int delay, final TextToSpeech tts) {
+        Log.d("temp", "speakAnswerAndGetInput");
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -124,6 +132,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
 
     public void doSomethingOnceTTSIsFinishedSpeaking(final TextToSpeech tts, final Runnable action, final int backoffSeconds)
     {
+        Log.d("temp", "doSomethingOnceTTSIsFinishedSpeaking");
         if(tts.isSpeaking())
         {
             Runnable retry = new Runnable() {
@@ -154,6 +163,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
 
     // Create an intent that can start the Speech Recognizer activity
     private void displaySpeechRecognizer(InputType inputType) {
+        Log.d("temp", "displaySpeechRecognizer");
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -167,6 +177,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
+        Log.d("temp", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(
@@ -182,6 +193,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
     }
 
     private void onCardModeSpeechInput(String spokenText) {
+        Log.d("temp", "onCardModeSpeechInput");
         tts.speak("You said" + spokenText, TextToSpeech.QUEUE_ADD, null);
         CardStatus cardStatus = currentFlashcard.getCardStatus();
         long lastMinutesUntilNextAsk = cardStatus.getMinutesUntilNextAskDue();
