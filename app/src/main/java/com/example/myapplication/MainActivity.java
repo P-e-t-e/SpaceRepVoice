@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_EDIT_CARD = 991;
+    private static final int REQUEST_ADD_EDIT_CARD = 991;
     private static final int REQUEST_PLAY_CARDS = 992;
     private RecyclerView summaryRecyclerView;
 
@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d("temp", "MainActivity onActivityResult");
+        Log.d("temp", "MainActivity onActivityResult (requestCode: " + requestCode + " resultCode: " + resultCode + ")");
         super.onActivityResult(requestCode, resultCode, data);
         setNewRecyclerViewCardAdapter(summaryRecyclerView);
-        if (requestCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (data != null && data.hasExtra("toast")) {
                 Log.d("temp", "MainActivity toastTriggered");
                 Toast.makeText(this, data.getStringExtra("toast"), Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickAddCardButton(View view) {
         Intent intent = new Intent(this, ViewEditCardActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_EDIT_CARD);
     }
 
     public void onClickEditCardButton(View view) {
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("question", summaryQuestion.getText());
         intent.putExtra("card_id", cardId.getText());
         intent.putExtra("card_answer", cardAnswer.getText());
-        startActivityForResult(intent, REQUEST_EDIT_CARD);
+        startActivityForResult(intent, REQUEST_ADD_EDIT_CARD);
     }
 
     public void onClickDeleteCardButton(View view)

@@ -2,12 +2,14 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,10 +24,11 @@ import java.util.Locale;
 public class PlayQuestionsActivity extends AppCompatActivity {
 
     TextToSpeech tts;
-    private static final int SPEECH_REQUEST_CODE = 0;
+    private static final int RATE_CARD_REQUEST_CODE = 0;
     private static final int secondsWaitForAnswer = 20;
     private FlashCard currentFlashcard;
     List<FlashCard> flashCards;
+    private boolean inProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +69,18 @@ public class PlayQuestionsActivity extends AppCompatActivity {
 
     public void onClickStartButton(View view) {
         Log.d("temp", "onCLickStartButton");
-        tts.speak("Starting new learning session in 3 2 1", TextToSpeech.QUEUE_FLUSH, null);
-        askMostUrgentQuestion(false);
+        Button startButton = findViewById(R.id.start_play_button);
+        if(inProgress)
+        {
+            finish();
+        }
+        else
+        {
+            tts.speak("Starting new learning session in 3 2 1", TextToSpeech.QUEUE_FLUSH, null);
+            askMostUrgentQuestion(false);
+            startButton.setText("Stop");
+            startButton.setBackgroundColor(Color.RED);
+        }
     }
 
     private void askMostUrgentQuestion(boolean repeat) {
@@ -124,7 +137,7 @@ public class PlayQuestionsActivity extends AppCompatActivity {
                 tts.speak("Answer", TextToSpeech.QUEUE_ADD, null);
                 tts.speak(flashCard.getAnswer(), TextToSpeech.QUEUE_ADD, null);
                 //once answer TTS is finished, ask for user input within 10 seconds
-                doSomethingOnceTTSIsFinishedSpeaking(tts, getDefaultDisplaySpeechRegignizerRunnable(InputType.CARD_MODE), 1);
+                doSomethingOnceTTSIsFinishedSpeaking(tts, getDefaultDisplaySpeechRegignizerRunnable(RATE_CARD_REQUEST_CODE), 1);
             }
         }, delay * 1000);
     }
@@ -150,26 +163,25 @@ public class PlayQuestionsActivity extends AppCompatActivity {
         }
     }
 
-    private Runnable getDefaultDisplaySpeechRegignizerRunnable(final InputType inputType)
+    private Runnable getDefaultDisplaySpeechRegignizerRunnable(final int requestCode)
     {
         return new Runnable() {
 
             @Override
             public void run() {
-                displaySpeechRecognizer(inputType);
+                displaySpeechRecognizer(requestCode);
             }
         };
     }
 
     // Create an intent that can start the Speech Recognizer activity
-    private void displaySpeechRecognizer(InputType inputType) {
+    private void displaySpeechRecognizer(int requestCode) {
         Log.d("temp", "displaySpeechRecognizer");
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra("inputType", inputType.name());
         // Start the activity, the intent will be populated with the speech text
-        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        startActivityForResult(intent, requestCode);
     }
 
     // This callback is invoked when the Speech Recognizer returns.
@@ -179,16 +191,11 @@ public class PlayQuestionsActivity extends AppCompatActivity {
                                     Intent data) {
         Log.d("temp", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == RATE_CARD_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
             String spokenText = results.get(0);
-            if (data.hasExtra("inputType")) {
-                InputType inputType = InputType.valueOf(data.getStringExtra("inputType"));
-                if (inputType == InputType.CARD_MODE) {
-                    onCardModeSpeechInput(spokenText);
-                }
-            }
+            onCardModeSpeechInput(spokenText);
         }
     }
 
